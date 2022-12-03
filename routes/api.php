@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ZaloraController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Middleware\AdminCheck;
+use App\Http\Middleware\UserCheck;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +25,19 @@ Route::post('login', [AuthController::class, 'login']);
 
 //protected route
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('zalora', ZaloraController::class, ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+    
+    Route::middleware([AdminCheck::class])->group(function () {
+        Route::resource('zalora', ZaloraController::class, ['only' => ['show', 'store', 'update', 'destroy']]);
+        Route::resource('transaction', TransactionController::class, ['only' => ['index', 'update']]);
+    });
+    
+    Route::middleware([UserCheck::class])->group(function () {
+        Route::resource('transaction', TransactionController::class)->only('store');
+        Route::resource('review', ReviewController::class)->only('store', 'update', 'destroy');
+    });
 
-    
-    Route::get('review', [ReviewController::class, 'index']);
-    Route::get('review/{id}', [ReviewController::class, 'show']);
-    Route::resource('review', ReviewController::class)->except('create', 'update', 'show', 'index', 'destroy');
-    
-    Route::resource('transaction', TransactionController::class)->only('store', 'index');
+    Route::resource('review', ReviewController::class)->only('show', 'index', 'destroy');
+    Route::resource('zalora', ZaloraController::class)->only('index');
 
     Route::post('logout', [AuthController::class, 'logout']);
 });

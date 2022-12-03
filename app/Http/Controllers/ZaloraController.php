@@ -35,13 +35,15 @@ class ZaloraController extends Controller
         $validate = Validator::make($request->all(), [
             'nama_Sepatu' => 'required|string',
             'deskripsi' => 'required|string',
-            'harga' => 'required|integer'
+            'harga' => 'required|integer',
+            'stock_sepatu' => 'required|integer',
         ]);
 
         $data = Zalora::create([
-            'nama_Sepatu' => $request->nama_makanan,
+            'nama_Sepatu' => $request->nama_Sepatu,
             'deskripsi' => $request->deskripsi,
-            'harga' => $request->harga
+            'harga' => $request->harga,
+            'stock_sepatu' => $request->stock_sepatu
         ]);
 
         if ($data) {
@@ -71,7 +73,7 @@ class ZaloraController extends Controller
         if($tabel){
             return $tabel;
         }else{
-            return ["message" => "Data List Makanan tidak ditemukan"];
+            return ["message" => "Data List Sepatu tidak ditemukan"];
         }
     }
 
@@ -104,9 +106,9 @@ class ZaloraController extends Controller
         $tabel = Zalora::find($id);
         if($tabel){
             $tabel->delete();
-            return ["message" => "Data List Makanan berhasil dihapus"];
+            return ["message" => "Data List Sepatu berhasil dihapus"];
         }else{
-            return ["message" => "Data List Makanan tidak ditemukan"];
+            return ["message" => "Data List Sepatu tidak ditemukan"];
         }
     }
 }

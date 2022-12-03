@@ -18,7 +18,7 @@ class CreateZalorasTable extends Migration
             $table->string('nama_Sepatu');
             $table->string('deskripsi');
             $table->BigInteger('harga');
-            $table->integer('stock_sepatu');
+            $table->BigInteger('stock_sepatu');
             $table->timestamps();
         });
     }

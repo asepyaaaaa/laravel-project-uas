@@ -13,8 +13,7 @@ class Zalora extends Model
         'nama_Sepatu',
         'deskripsi',
         'harga',
-        'stock_sepatu',
-        'harga'
+        'stock_sepatu'    
     ];
 
     public function zalora()

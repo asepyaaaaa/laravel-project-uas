@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Facades\Validator;
 use App\Models\Transaction;
 use App\Models\Zalora;
+use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
@@ -25,9 +25,8 @@ class TransactionController extends Controller
     {
         $user = Auth()->user();
         $zalora = Zalora::find($request->id_sepatu);
-        $check = Zalora::where('id', $request->id_ticket)->first()->stock_sepatu;
         
-        $transaction = validator::make(request->all(), [
+        $transaction = Validator::make($request->all(), [
             'id_sepatu' => 'required',
             'jumlah_sepatu' => 'required',
         ]);
@@ -41,7 +40,7 @@ class TransactionController extends Controller
             ], 400);
         }
         
-        if ($check < $request->jumlah_sepatu){
+        if ($zalora->stock_sepatu < $request->jumlah_sepatu){
             return response()->json([
                 'success' => false,
                 'code' => 400,
@@ -58,7 +57,7 @@ class TransactionController extends Controller
         ]);
 
         $zalora->stock_sepatu = $zalora->stock_sepatu - $request->jumlah_sepatu;
-        $admin->save();
+        $zalora->save();
 
 
             if ($transaction) {
